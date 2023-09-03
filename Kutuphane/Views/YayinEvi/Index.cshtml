@@ -40,12 +40,42 @@
 
             yayinEvleriniDoldur();
 
-            $("#btnEkle").one('click',function () {
+            $("#btnEkle").on('click', function () {
+                $(".frmInput").val('');
                 $("#modalEkle").modal("show");
-            })
+
+                $("#btnKaydet").one('click', function () {
+
+                    let data = {
+                        ad: $("#txtYayinEviAd").val(),
+                        adres: $("#txtYayinEviAdres").val(),
+                        tel: $("#txtTelefon").val()
+                    };
+
+                    $.ajax({
+                        type:'POST',
+                        data:data,
+                        url:'@Url.Action("Add","YayinEvi")',
+                        success: function (res) {
+                            toastr.success("Başarılı", "Yayın evi eklenmiştir");
+                            DataTable.ajax.reload();
+                            $("#modalEkle").modal("hide");
+
+                        }
+                    });
+
+
+                });
+
+
+
+
+            });
 
 
         });
+
+
 
 
 

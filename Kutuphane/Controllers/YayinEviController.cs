@@ -103,5 +103,10 @@ namespace Kutuphane.Controllers
 
             return RedirectToAction("Index");   
         }
+        [HttpPost]
+        public IActionResult GetById(int id)
+        {
+            return Json(_context.YayinEvleri.Find(id));
+        }
     }
 }

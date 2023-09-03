@@ -22,7 +22,7 @@ namespace Kutuphane.Controllers
 
      
 
-        public IActionResult GetAllPublishers2()
+        public IActionResult GetAllPublishers()
         {
             return Json(new { data = _context.YayinEvleri.ToList() });
         }

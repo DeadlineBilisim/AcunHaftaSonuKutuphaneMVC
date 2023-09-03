@@ -20,11 +20,12 @@ namespace Kutuphane.Controllers
         }
 
 
-        public IActionResult GetAll()
+     
+
+        public IActionResult GetAllPublishers()
         {
             return Json(new { data = _context.YayinEvleri.ToList() });
         }
-
 
         //bu metot sadece yayin evi eklemek için bize bir sayfa servis eden bir metotdur:
         public IActionResult Add()

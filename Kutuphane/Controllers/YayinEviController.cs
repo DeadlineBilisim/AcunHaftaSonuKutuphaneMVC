@@ -20,7 +20,7 @@ namespace Kutuphane.Controllers
         }
 
 
-        public IActionResult GetAll()
+        public IActionResult GetAllPublushers1()
         {
             return Json(new { data = _context.YayinEvleri.ToList() });
         }

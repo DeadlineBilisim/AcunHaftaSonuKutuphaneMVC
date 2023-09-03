@@ -24,15 +24,17 @@
                     {data:"ad",title:"Yayın Evi Adı"}, 
                     {data:"adres", title:"Adres"}, 
                     {data:"tel",title:"Telefon"},
-                    {data:"id",title:"İşlemler"}
+                    {
+                        data: "id", title: "İşlemler", render: function (id, type, row) {
+                            return `<a onclick="yayinEviSil(${id})" class="btn btn-danger">Sil</a>`;
+                        }
+                    }
                 ]
 
             });
 
 
         });
-
-
 
 
 
@@ -57,7 +59,7 @@
                         },
                         success: function (res) {
                             $("#trYayinEvi-" + disaridanGelenId).remove();
-                          
+                            DataTable.ajax.reload();
                             toastr.success("Silme işlemi başarılı","BAŞARILI !")
 
                         }

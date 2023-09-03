@@ -11,7 +11,7 @@
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalTitleId">Yayın Evi Ekleme Formu</h5>
+                <h5 class="modal-title" id="modalTitleId">Yayın Evi <span id="lblModalTitle"></span> Formu</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -43,6 +43,8 @@
             $("#btnEkle").on('click', function () {
                 $(".frmInput").val('');
                 $("#modalEkle").modal("show");
+                $("#lblModalTitle").text("Ekleme");
+                
 
                 $("#btnKaydet").one('click', function () {
 
@@ -65,7 +67,7 @@
                     });
 
 
-                });
+                }).text("Kaydet").removeClass("btn-success").addClass("btn-primary");
 
 
 
@@ -91,7 +93,7 @@
             }).then((result) => {
                 /* Read more about isConfirmed, isDenied below */
                 if (result.isConfirmed) {
-
+                 
                     $.ajax({
                         type: 'POST',
                         url: '/YayinEvi/DeleteAjax',
@@ -99,8 +101,16 @@
                             id: disaridanGelenId
                         },
                         success: function (res) {
-                            $("#trYayinEvi-" + disaridanGelenId).remove();
-                            DataTable.ajax.reload();
+                            $("#tr" + disaridanGelenId).remove();
+                         
+                            var statusYazisi = $("#tblYayinEvleri_info").text();
+                            var kayitSayisi = parseInt(statusYazisi.split(' ')[5])-1;
+
+                            $("#tblYayinEvleri_info").text(`Showing 1 to ${kayitSayisi} of ${kayitSayisi}  entries `);
+
+
+                           
+
                             toastr.success("Silme işlemi başarılı","BAŞARILI !")
 
                         }
@@ -131,6 +141,9 @@
         {
             DataTable = $("#tblYayinEvleri").DataTable({
                 ajax: "/YayinEvi/GetAllPublishers",
+                rowId: function (row) {
+                    return "tr" + row.id;
+                },
                 columns: [
                     { data: "id", title: "ID" },
                     { data: "ad", title: "Yayın Evi Adı" },
@@ -138,12 +151,54 @@
                     { data: "tel", title: "Telefon" },
                     {
                         data: "id", title: "İşlemler", render: function (id, type, row) {
-                            return `<a onclick="deletePublisher(${id})" class="btn btn-danger">Sil</a>`;
+                            return `<a onclick="deletePublisher(${id})" class="btn btn-danger">Sil</a> <a onclick="updatePublisher(${id})" class="btn btn-warning">Düzenle</a>`;
                         }
                     }
                 ]
 
             });
+        }
+
+        function updatePublisher(id) { 
+
+            //databaseden asıl olan nesneyi cagiriyoruz.
+            $.ajax({
+                type:'POST',
+                url:'/YayinEvi/GetById',
+                data: {
+                    id:id
+                },
+                success: function (res) {
+                    $("#txtYayinEviAd").val(res.ad);
+                    $("#txtYayinEviAdres").val(res.adres);
+                    $("#txtTelefon").val(res.tel);
+                }
+            });
+            $("#lblModalTitle").text("Düzenleme");
+            $("#modalEkle").modal("show");
+            $("#btnKaydet").text("Güncelle").removeClass("btn-primmary").addClass("btn-success").one('click',function () {
+
+                $.ajax({
+                    url:'/YayinEvi/Upsert',
+                    type:'POST',
+                    data: {
+                        id:id,
+                        ad: $("#txtYayinEviAd").val(),
+                        adres: $("#txtYayinEviAdres").val(),
+                        tel:$("#txtTelefon").val()
+
+
+                    },
+                    success: function () {
+                        toastr.success("başarılı", "işlem başarılı");
+                        DataTable.ajax.reload();
+                        $("#modalEkle").modal('hide');
+                    }
+
+                })
+
+            });
+
         }
 
 

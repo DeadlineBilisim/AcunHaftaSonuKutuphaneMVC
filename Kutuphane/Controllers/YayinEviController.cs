@@ -22,7 +22,7 @@ namespace Kutuphane.Controllers
 
         public IActionResult GetAll()
         {
-            return Json(_context.YayinEvleri.ToList());
+            return Json(new { data = _context.YayinEvleri.ToList() });
         }
 
 

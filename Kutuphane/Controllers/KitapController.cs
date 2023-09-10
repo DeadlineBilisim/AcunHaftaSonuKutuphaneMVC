@@ -84,6 +84,7 @@ namespace Kutuphane.Controllers
         public IActionResult GetAll()
         {
             return Json(new {data=_context.Kitaplar.Include(k=>k.Yazarlar).Include(k=>k.YayinEvleri).ToList()});
+            
         }
 
         [HttpPost]

@@ -1,4 +1,9 @@
 using Kutuphane.Data;
+using Kutuphane.Models;
+using Kutuphane.Repository.Abstract;
+using Kutuphane.Repository.Concrete;
+using Kutuphane.Repository.Shared.Abstract;
+using Kutuphane.Repository.Shared.Concrete;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
@@ -11,6 +16,9 @@ builder.Services.AddDbContext<KutuphaneContext>(options=>options.UseSqlServer(bu
 builder.Services.AddControllers().AddNewtonsoftJson(x =>
  x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
+
+builder.Services.AddScoped<IYazarRepository,YazarRepository>();
+builder.Services.AddScoped<IYayinEviRepository, YayinEviRepository>();
 
 
 var app = builder.Build();

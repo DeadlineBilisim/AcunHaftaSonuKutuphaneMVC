@@ -1,5 +1,7 @@
 ﻿using Kutuphane.Data;
 using Kutuphane.Models;
+using Kutuphane.Repository.Abstract;
+using Kutuphane.Repository.Shared.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kutuphane.Controllers
@@ -7,31 +9,40 @@ namespace Kutuphane.Controllers
     public class YazarController : Controller
     {
         //Dependency Injection
-        private readonly KutuphaneContext _context;
-        public YazarController(KutuphaneContext context)
+        private readonly IYazarRepository _repo;
+        
+
+        public YazarController(IYazarRepository repo)
         {
-            _context = context;
+            _repo = repo;
+          
         }
 
         public IActionResult Index()
         {
+            
             return View();
         }
 
+        //CONCRETE
         public IActionResult GetAll()
         {
-            return Json(new { data = _context.Yazarlar.ToList() });
+
+            
+            return Json(new { data = _repo.GetAll() });
         }
                
         public IActionResult Delete(int id)
         {
             // Yazar yazar = _context.Yazarlar.Where(y => y.Id == id).First();
 
-           // Yazar yazar = _context.Yazarlar.FirstOrDefault(x => x.Id == id);
-          
-            _context.Yazarlar.Remove(_context.Yazarlar.Find(id));
+            // Yazar yazar = _context.Yazarlar.FirstOrDefault(x => x.Id == id);
 
-            _context.SaveChanges();
+            _repo.Remove(_repo.GetById(id));
+            _repo.Save();
+           
+
+            
 
 
             return RedirectToAction("Index");
@@ -39,11 +50,11 @@ namespace Kutuphane.Controllers
         }
              
 
-        public IActionResult Upsert(int? id)
+        public IActionResult Upsert(int id)
         {
-            if (id != null)
+            if (id != 0)
             {
-                return View(_context.Yazarlar.Find(id));
+                return View(_repo.GetById(id));
             }
             else {
                 return View();
@@ -55,13 +66,13 @@ namespace Kutuphane.Controllers
         {
             if(yazar.Id==0)
             {
-                _context.Yazarlar.Add(yazar);
-                _context.SaveChanges();
+                _repo.Add(yazar);
+                _repo.Save();
             }
             else
             {
-                _context.Yazarlar.Update(yazar);
-                _context.SaveChanges();
+                _repo.Update(yazar);
+                _repo.Save();
             }
             return RedirectToAction("Index");
         }

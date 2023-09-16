@@ -11,7 +11,8 @@ namespace Kutuphane.Repository.Shared.Abstract
     public interface IRepository<T> where T : BaseModel
     {
         //varsaylım ki T - Yazar
-        IEnumerable<T> GetAll();
+        IQueryable<T> GetAll();
+        IQueryable<T> GetAll(Expression<Func<T, bool>> filter);
         void Add(T item);
         void AddRange(IEnumerable<T> items);
 

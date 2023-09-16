@@ -17,8 +17,10 @@ builder.Services.AddControllers().AddNewtonsoftJson(x =>
  x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 
-builder.Services.AddScoped<IYazarRepository,YazarRepository>();
+
 builder.Services.AddScoped<IYayinEviRepository, YayinEviRepository>();
+builder.Services.AddScoped<IRepository<Yazar>,Repository<Yazar>>();
+
 
 
 var app = builder.Build();

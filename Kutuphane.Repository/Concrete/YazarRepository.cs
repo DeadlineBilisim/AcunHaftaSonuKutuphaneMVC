@@ -2,6 +2,7 @@
 using Kutuphane.Models;
 using Kutuphane.Repository.Abstract;
 using Kutuphane.Repository.Shared.Concrete;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,5 +24,6 @@ namespace Kutuphane.Repository.Concrete
         {
            return _db.Kitaplar.Where(k=>k.Yazarlar.Any(y => y.Id == id)).ToList();
         }
+      
     }
 }

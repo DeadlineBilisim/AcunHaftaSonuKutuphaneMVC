@@ -1,6 +1,8 @@
 ﻿using Kutuphane.Data;
 using Kutuphane.Models;
+using Kutuphane.Repository.Abstract;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
@@ -9,23 +11,27 @@ namespace Kutuphane.Controllers
     public class KitapController:Controller
     {
         //dependency injection ile contextimizi çekelim
-        private readonly KutuphaneContext _context;
+        private readonly IKitapRepository _repo;
+        private readonly IYazarRepository _repoYazar;
+        private readonly IYayinEviRepository _repoYayinEvi;
 
-        public KitapController(KutuphaneContext context)
+        public KitapController(IKitapRepository repo, IYazarRepository repoYazar, IYayinEviRepository repoYayinEvi)
         {
-            _context = context;
+            _repo = repo;
+            _repoYazar = repoYazar;
+            _repoYayinEvi = repoYayinEvi;
         }
 
         public IActionResult Index()
         {
             
-            return View(_context.Kitaplar.Include(k => k.YayinEvleri).Include(k => k.Yazarlar).ToList());
+            return View(_repo.GetAll().Include(k=>k.Yazarlar).Include(k=>k.YayinEvleri).ToList());
         }
 
         public IActionResult Add()
         {
-            ViewData["Yazarlar"] = _context.Yazarlar.ToList();
-            ViewData["YayinEvleri"] = _context.YayinEvleri.ToList();
+            ViewData["Yazarlar"] = _repoYazar.GetAll().ToList();
+            ViewData["YayinEvleri"] = _repoYayinEvi.GetAll().ToList();
 
             return View();
         }
@@ -33,30 +39,30 @@ namespace Kutuphane.Controllers
         public IActionResult Add(Kitap kitap, List<int> yazarlar,List<int> yayinEvleri)
         {
             foreach(int s in yazarlar)
-                kitap.Yazarlar.Add(_context.Yazarlar.Find(s));
+                kitap.Yazarlar.Add(_repoYazar.GetById(s));
             
             foreach (int s in yayinEvleri)
-                kitap.YayinEvleri.Add(_context.YayinEvleri.Find(s));
+                kitap.YayinEvleri.Add(_repoYayinEvi.GetById(s));
 
          
-            _context.Kitaplar.Add(kitap);
-            _context.SaveChanges();
+            _repo.Add(kitap);
+            _repo.Save();
             return RedirectToAction("Index");
         }
 
         public IActionResult Update(int id)
         {
-            ViewData["Yazarlar"] = _context.Yazarlar.ToList();
-            ViewData["YayinEvleri"] = _context.YayinEvleri.ToList();
+            ViewData["Yazarlar"] = _repoYazar.GetAll().ToList();
+            ViewData["YayinEvleri"] = _repoYayinEvi.GetAll().ToList();
 
 
-            return View(_context.Kitaplar.Include(k => k.Yazarlar).Include(k => k.YayinEvleri).FirstOrDefault(k => k.Id == id));
+            return View(_repo.GetAll(k => k.Id == id).Include(k => k.Yazarlar).Include(k => k.YayinEvleri).First());
         }
 
         [HttpPost]
         public IActionResult Update(Kitap kitap, List<int> yazarlar, List<int> yayinEvleri)
         {
-            Kitap asil = _context.Kitaplar.Include(k=>k.YayinEvleri).Include(k=>k.Yazarlar).FirstOrDefault(k=>k.Id==kitap.Id);
+            Kitap asil = _repo.GetAll(k => k.Id == kitap.Id).Include(k => k.Yazarlar).Include(k => k.YayinEvleri).First();
 
             asil.Ad = kitap.Ad;
             asil.ISBN = kitap.ISBN;
@@ -64,17 +70,17 @@ namespace Kutuphane.Controllers
             List<Yazar> yazarListesi = new List<Yazar>();
             List<YayinEvi> yayinEvleriListesi = new List<YayinEvi>();
             foreach (int s in yazarlar)
-                yazarListesi.Add(_context.Yazarlar.Find(s));
+                yazarListesi.Add(_repoYazar.GetById(s));
 
             foreach (int s in yayinEvleri)
-               yayinEvleriListesi.Add(_context.YayinEvleri.Find(s));
+               yayinEvleriListesi.Add(_repoYayinEvi.GetById(s));
 
             asil.Yazarlar = yazarListesi;
             asil.YayinEvleri = yayinEvleriListesi;
 
 
-            _context.Kitaplar.Update(asil);
-            _context.SaveChanges();
+            _repo.Update(asil);
+            _repo.Save();
             return RedirectToAction("Index");
 
 
@@ -83,14 +89,15 @@ namespace Kutuphane.Controllers
 
         public IActionResult GetAll()
         {
-            return Json(new {data=_context.Kitaplar.Include(k=>k.Yazarlar).Include(k=>k.YayinEvleri).ToList()});
+           return Json(new {data=_repo.GetAll().Include(k=>k.Yazarlar).Include(k=>k.YayinEvleri).ToList()});
+          
             
         }
 
         [HttpPost]
         public IActionResult GetById(int id)
         {
-           return Json( _context.Kitaplar.Include(k => k.Yazarlar).Include(k => k.YayinEvleri).FirstOrDefault(k => k.Id == id));
+           return Json( _repo.GetAll(k => k.Id == id).Include(k => k.Yazarlar).Include(k => k.YayinEvleri).First());
         }
     }
 }

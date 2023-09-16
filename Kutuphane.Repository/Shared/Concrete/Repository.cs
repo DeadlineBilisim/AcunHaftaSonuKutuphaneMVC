@@ -2,6 +2,7 @@
 using Kutuphane.Models;
 using Kutuphane.Repository.Shared.Abstract;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,9 +34,14 @@ namespace Kutuphane.Repository.Shared.Concrete
            _db.AddRange(items);
         }
 
-        public IEnumerable<T> GetAll()
+        public IQueryable<T> GetAll()
         {
-            return _dbSet.Where(t => t.IsDeleted == false).ToList();
+            return _dbSet.Where(t => t.IsDeleted == false);
+        }
+
+        public IQueryable<T> GetAll(Expression<Func<T, bool>> filter)
+        {
+            return GetAll().Where(filter);
         }
 
         public T GetById(int id)

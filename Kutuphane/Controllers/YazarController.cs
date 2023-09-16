@@ -2,17 +2,20 @@
 using Kutuphane.Models;
 using Kutuphane.Repository.Abstract;
 using Kutuphane.Repository.Shared.Abstract;
+using Kutuphane.Repository.Shared.Concrete;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Kutuphane.Controllers
 {
     public class YazarController : Controller
     {
+
         //Dependency Injection
-        private readonly IYazarRepository _repo;
+        private readonly Repository<Yazar> _repo;
         
 
-        public YazarController(IYazarRepository repo)
+        public YazarController(Repository<Yazar> repo)
         {
             _repo = repo;
           
@@ -28,15 +31,13 @@ namespace Kutuphane.Controllers
         public IActionResult GetAll()
         {
 
-            
-            return Json(new { data = _repo.GetAll() });
+
+            return Json(new { data = _repo.GetAll()});
         }
                
         public IActionResult Delete(int id)
         {
-            // Yazar yazar = _context.Yazarlar.Where(y => y.Id == id).First();
-
-            // Yazar yazar = _context.Yazarlar.FirstOrDefault(x => x.Id == id);
+            
 
             _repo.Remove(_repo.GetById(id));
             _repo.Save();

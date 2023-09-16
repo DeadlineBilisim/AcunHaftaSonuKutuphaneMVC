@@ -12,6 +12,8 @@ namespace Kutuphane.Models
     {
         public string Adres { get; set; }
         public string Tel { get; set; }
+        public int? KullaniciId {  get; set; }
+        public virtual Kullanici Kullanici { get; set; }
 
         public virtual ICollection<Kitap> Kitaplar { get; set; } = new List<Kitap>();
         public virtual ICollection<Yazar> Yazarlar { get; set; }= new List<Yazar>();

@@ -1,5 +1,15 @@
-﻿@{
+﻿@using System.Security.Claims;
+@{
     ViewData["Title"] = "Home Page";
+}
+
+@if( User.IsInRole("Admin"))
+{
+    <h1>Hoşgeldin @User.FindFirstValue(ClaimTypes.NameIdentifier)</h1>
+}
+else
+{
+    <h1>giren kullanıcı USER</h1>
 }
 
 <div class="text-center">

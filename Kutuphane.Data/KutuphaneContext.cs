@@ -23,5 +23,7 @@ namespace Kutuphane.Data
         public virtual DbSet<YayinEvi> YayinEvleri { get; set; }
         public virtual DbSet<Kitap> Kitaplar { get; set; }
 
+        public virtual DbSet<Kullanici> Kullanicilar { get; set; }
+
     }
 }

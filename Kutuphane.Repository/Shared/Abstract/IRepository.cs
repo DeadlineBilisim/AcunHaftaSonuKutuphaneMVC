@@ -25,7 +25,7 @@ namespace Kutuphane.Repository.Shared.Abstract
 
         T GetFirstOrDefault(Expression<Func<T, bool>> filter);
 
-        void Save();
+     
 
 
         

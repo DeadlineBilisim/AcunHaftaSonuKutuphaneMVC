@@ -4,7 +4,9 @@ using Kutuphane.Repository.Abstract;
 using Kutuphane.Repository.Concrete;
 using Kutuphane.Repository.Shared.Abstract;
 using Kutuphane.Repository.Shared.Concrete;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Eventing.Reader;
 using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,10 +18,15 @@ builder.Services.AddDbContext<KutuphaneContext>(options=>options.UseSqlServer(bu
 builder.Services.AddControllers().AddNewtonsoftJson(x =>
  x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+{
+    options.LoginPath = "/Kullanici/Login";
+  
+
+});
 
 
-builder.Services.AddScoped<IYayinEviRepository, YayinEviRepository>();
-builder.Services.AddScoped<IRepository<Yazar>,Repository<Yazar>>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 
@@ -42,6 +49,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 
 app.MapControllerRoute(

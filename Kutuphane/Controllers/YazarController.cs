@@ -3,23 +3,24 @@ using Kutuphane.Models;
 using Kutuphane.Repository.Abstract;
 using Kutuphane.Repository.Shared.Abstract;
 using Kutuphane.Repository.Shared.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Kutuphane.Controllers
 {
+    [Authorize]
     public class YazarController : Controller
     {
 
         //Dependency Injection
-        private readonly Repository<Yazar> _repo;
-        
+        private readonly IUnitOfWork _unitOfWork;
 
-        public YazarController(Repository<Yazar> repo)
+        public YazarController(IUnitOfWork unitOfWork)
         {
-            _repo = repo;
-          
+            _unitOfWork = unitOfWork;
         }
+
 
         public IActionResult Index()
         {
@@ -32,15 +33,15 @@ namespace Kutuphane.Controllers
         {
 
 
-            return Json(new { data = _repo.GetAll()});
+            return Json(new { data = _unitOfWork.Yazarlar.GetAll()});
         }
                
         public IActionResult Delete(int id)
         {
-            
 
-            _repo.Remove(_repo.GetById(id));
-            _repo.Save();
+
+            _unitOfWork.Yazarlar.Remove(_unitOfWork.Yazarlar.GetById(id));
+            _unitOfWork.Save();
            
 
             
@@ -55,7 +56,7 @@ namespace Kutuphane.Controllers
         {
             if (id != 0)
             {
-                return View(_repo.GetById(id));
+                return View(_unitOfWork.Yazarlar.GetById(id));
             }
             else {
                 return View();
@@ -67,13 +68,13 @@ namespace Kutuphane.Controllers
         {
             if(yazar.Id==0)
             {
-                _repo.Add(yazar);
-                _repo.Save();
+                _unitOfWork.Yazarlar.Add(yazar);
+                _unitOfWork.Save();
             }
             else
             {
-                _repo.Update(yazar);
-                _repo.Save();
+                _unitOfWork.Yazarlar.Update(yazar);
+                _unitOfWork.Save();
             }
             return RedirectToAction("Index");
         }

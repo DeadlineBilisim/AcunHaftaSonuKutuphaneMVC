@@ -11,6 +11,8 @@ namespace Kutuphane.Models
     public class Kitap:BaseModel
     {
         public string? ISBN { get; set; }
+        public int? KullaniciId {  get; set; }
+        public virtual Kullanici Kullanici { get; set; }
 
         public virtual ICollection<Yazar> Yazarlar { get; set; } = new List<Yazar>();
         public virtual ICollection<YayinEvi> YayinEvleri { get; set; } = new List<YayinEvi>();

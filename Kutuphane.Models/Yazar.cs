@@ -6,7 +6,10 @@ namespace Kutuphane.Models
     public class Yazar:BaseModel
     {
         public string? Ozgecmis { get; set; }
+        public int? KullaniciId { get; set; }
+        public virtual Kullanici Kullanici { get; set; }
         public virtual ICollection<Kitap> Kitaplar { get; set; } = new List<Kitap>();
         public virtual ICollection<YayinEvi> YayinEvleri { get; set; }=new List<YayinEvi>();
+
     }
 }

@@ -66,10 +66,7 @@ namespace Kutuphane.Repository.Shared.Concrete
             _dbSet.RemoveRange(items);
         }
 
-        public void Save()
-        {
-           _db.SaveChanges();
-        }
+      
 
         public void Update(T item)
         {

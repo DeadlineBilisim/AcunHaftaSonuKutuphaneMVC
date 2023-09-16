@@ -1,21 +1,24 @@
 ﻿using Kutuphane.Data;
 using Kutuphane.Models;
+using Kutuphane.Repository.Shared.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace Kutuphane.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
-       
-        private readonly KutuphaneContext _context;
 
-        public HomeController(KutuphaneContext context )
+        private readonly IUnitOfWork _unitOfWork;
+
+        public HomeController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
           
         }
-
+       
         public IActionResult Index()
         {
        

@@ -58,6 +58,12 @@ namespace Kutuphane.Controllers
 
         }
 
+        public IActionResult Logout()
+        {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login");
+        }
+
       
     }
 }

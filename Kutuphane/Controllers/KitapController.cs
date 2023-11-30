@@ -102,5 +102,12 @@ namespace Kutuphane.Controllers
         {
            return Json( _unitOfWork.Kitaplar.GetAll(k => k.Id == id).Include(k => k.Yazarlar).Include(k => k.YayinEvleri).First());
         }
+
+        public IActionResult Delete(int id)
+        {
+            _unitOfWork.Kitaplar.Remove(_unitOfWork.Kitaplar.GetById(id));
+            _unitOfWork.Save();
+            return Ok("Silindi");
+        }
     }
 }

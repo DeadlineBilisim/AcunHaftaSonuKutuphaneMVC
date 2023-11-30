@@ -49,10 +49,11 @@
         $(document).ready(() => {
 
             $("#btnEkle").click(() => {
+                $(".frmInput").val("");
                 $("#modalEkle").modal("show");
                 ddlleriDoldur();
 
-                $("#btnKaydet").off().click(function () {
+                $("#btnKaydet").one("click", function () {
 
                     let kitap = {
                         ad: $("#txtKitapAdi").val(),
@@ -87,7 +88,7 @@
 
                     });
 
-                });
+                }).text("Kaydet").removeClass("btn-success").addClass("btn-primary");
 
 
 
@@ -170,7 +171,7 @@
                     },
                     {
                         data: 'id', title: 'İşlemler', render: function (x) {
-                            return `<a class="btn btn-danger">Sil</a> <a onclick="kitapDuzenle(${x})" class="btn btn-success">Düzenle</a>`;
+                            return `<a onclick="deleteKitap(${x})" class="btn btn-danger">Sil</a> <a onclick="kitapDuzenle(${x})" class="btn btn-success">Düzenle</a>`;
                         }
                     }
                 ]
@@ -228,18 +229,49 @@
                     });
 
                     $("#modalEkle").modal('show');
-
-
-
-
-
+                    $("#btnKaydet").text("Güncelle").removeClass("btn-primary").addClass("btn-success").one("click", () => {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Kitap/Update",
+                            data: {
+                                id: kitapId,
+                                ad: $("#txtKitapAdi").val(),
+                                isbn: $("#txtISBN").val(),
+                                yazarlar: $("#ddlYayinEvleri").val(),
+                                yayinEvleri: $("#ddlYayinEvleri").val()
+                            },
+                            success: () => {
+                                $("#modalEkle").modal('hide');
+                                toastr.success("Başarılı şekilde güncellendi");
+                                DataTable.ajax.reload();
+                            }
+                        })
+                    });
                 }
-            })
-
+            });
         }
 
-
-
-
-    </script>
+        function deleteKitap(kitapId) {
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Bu işlemi geri alamayacaksınız!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Evet, sil!',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Kitap/Delete',
+                        data: { id: kitapId },
+                        success: function () {
+                            toastr.success("Başarılı olarak silindi.");
+                            DataTable.ajax.reload();
+                        }
+                    });
                 }
+            })
+        }
+    </script>
+}

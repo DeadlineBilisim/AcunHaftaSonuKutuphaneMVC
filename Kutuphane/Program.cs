@@ -4,6 +4,7 @@ using Kutuphane.Repository.Abstract;
 using Kutuphane.Repository.Concrete;
 using Kutuphane.Repository.Shared.Abstract;
 using Kutuphane.Repository.Shared.Concrete;
+using Kutuphane.Service.Configurations;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Eventing.Reader;
@@ -21,18 +22,13 @@ builder.Services.AddControllers().AddNewtonsoftJson(x =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
     options.LoginPath = "/Kullanici/Login";
-  
-
 });
 
-
+BusinessExtension.AddBusinessDI(builder.Services);
+builder.Services.AddScoped<IYazarRepository, YazarRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-
-
 var app = builder.Build();
-
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -49,8 +45,6 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-
 
 app.MapControllerRoute(
     name: "default",

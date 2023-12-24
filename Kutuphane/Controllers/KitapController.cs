@@ -2,6 +2,7 @@
 using Kutuphane.Models;
 using Kutuphane.Repository.Abstract;
 using Kutuphane.Repository.Shared.Abstract;
+using Kutuphane.Service.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
@@ -10,7 +11,7 @@ using System.Diagnostics;
 
 namespace Kutuphane.Controllers
 {
-    
+
     public class KitapController:Controller
     {
         //dependency injection ile contextimizi çekelim
@@ -19,10 +20,12 @@ namespace Kutuphane.Controllers
         //private readonly IYayinEviRepository _repoYayinEvi;
 
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IYazarService _yazarService;
 
-        public KitapController(IUnitOfWork unitOfWork)
+        public KitapController(IUnitOfWork unitOfWork, IYazarService yazarService)
         {
             _unitOfWork = unitOfWork;
+            _yazarService = yazarService;
         }
 
         public IActionResult Index()
@@ -33,7 +36,7 @@ namespace Kutuphane.Controllers
 
         public IActionResult Add()
         {
-            ViewData["Yazarlar"] = _unitOfWork.Yazarlar.GetAll().ToList();
+            ViewData["Yazarlar"] = _yazarService.GetAll().ToList();
             ViewData["YayinEvleri"] = _unitOfWork.YayinEvleri.GetAll().ToList();
 
             return View();
@@ -42,7 +45,7 @@ namespace Kutuphane.Controllers
         public IActionResult Add(Kitap kitap, List<int> yazarlar,List<int> yayinEvleri)
         {
             foreach(int s in yazarlar)
-                kitap.Yazarlar.Add(_unitOfWork.Yazarlar.GetById(s));
+                kitap.Yazarlar.Add(_yazarService.GetById(s));
             
             foreach (int s in yayinEvleri)
                 kitap.YayinEvleri.Add(_unitOfWork.YayinEvleri.GetById(s));
@@ -55,7 +58,7 @@ namespace Kutuphane.Controllers
       
         public IActionResult Update(int id)
         {
-            ViewData["Yazarlar"] = _unitOfWork.Yazarlar.GetAll().ToList();
+            ViewData["Yazarlar"] = _yazarService.GetAll().ToList();
             ViewData["YayinEvleri"] = _unitOfWork.YayinEvleri.GetAll().ToList();
 
 
@@ -73,7 +76,7 @@ namespace Kutuphane.Controllers
             List<Yazar> yazarListesi = new List<Yazar>();
             List<YayinEvi> yayinEvleriListesi = new List<YayinEvi>();
             foreach (int s in yazarlar)
-                yazarListesi.Add(_unitOfWork.Yazarlar.GetById(s));
+                yazarListesi.Add(_yazarService.GetById(s));
 
             foreach (int s in yayinEvleri)
                yayinEvleriListesi.Add(_unitOfWork.YayinEvleri.GetById(s));

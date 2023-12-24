@@ -1,11 +1,8 @@
 ﻿using Kutuphane.Data;
 using Kutuphane.Models;
-using Kutuphane.Repository.Abstract;
-using Kutuphane.Repository.Shared.Abstract;
-using Kutuphane.Repository.Shared.Concrete;
+using Kutuphane.Service.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Kutuphane.Controllers
 {
@@ -14,49 +11,35 @@ namespace Kutuphane.Controllers
     {
 
         //Dependency Injection
-        private readonly IUnitOfWork _unitOfWork;
+        //private readonly IUnitOfWork _unitOfWork;
+        private IYazarService _yazarService;
 
-        public YazarController(IUnitOfWork unitOfWork)
+        public YazarController(IYazarService yazarService)
         {
-            _unitOfWork = unitOfWork;
+            _yazarService = yazarService;
         }
 
-
         public IActionResult Index()
-        {
-            
+        {            
             return View();
         }
 
         //CONCRETE
         public IActionResult GetAll()
         {
-
-
-            return Json(new { data = _unitOfWork.Yazarlar.GetAll()});
+            return Json(new { data = _yazarService.GetAll() });
         }
                
         public IActionResult Delete(int id)
         {
-
-
-            _unitOfWork.Yazarlar.Remove(_unitOfWork.Yazarlar.GetById(id));
-            _unitOfWork.Save();
-           
-
-            
-
-
+            _yazarService.Remove(_yazarService.GetById(id));          
             return RedirectToAction("Index");
-
-        }
-             
-
+        }             
         public IActionResult Upsert(int id)
         {
             if (id != 0)
             {
-                return View(_unitOfWork.Yazarlar.GetById(id));
+                return View(_yazarService.GetById(id));
             }
             else {
                 return View();
@@ -68,13 +51,11 @@ namespace Kutuphane.Controllers
         {
             if(yazar.Id==0)
             {
-                _unitOfWork.Yazarlar.Add(yazar);
-                _unitOfWork.Save();
+                _yazarService.Add(yazar);
             }
             else
             {
-                _unitOfWork.Yazarlar.Update(yazar);
-                _unitOfWork.Save();
+                _yazarService.Update(yazar);
             }
             return RedirectToAction("Index");
         }

@@ -26,12 +26,13 @@ namespace Kutuphane.Repository.Shared.Concrete
         public void Add(T item)
         {
            _dbSet.Add(item);
-           
+           Save();
         }
 
         public void AddRange(IEnumerable<T> items)
         {
            _db.AddRange(items);
+           Save();
         }
 
         public IQueryable<T> GetAll()
@@ -59,11 +60,13 @@ namespace Kutuphane.Repository.Shared.Concrete
             item.IsDeleted = true;
 
             _dbSet.Update(item);
+            Save();
         }
 
         public void RemoveRange(IEnumerable<T> items)
         {
             _dbSet.RemoveRange(items);
+            Save();
         }
 
       
@@ -71,6 +74,12 @@ namespace Kutuphane.Repository.Shared.Concrete
         public void Update(T item)
         {
            _dbSet.Update(item);
+            Save();
+        }
+
+        public void Save()
+        {
+            _db.SaveChanges();
         }
     }
 }

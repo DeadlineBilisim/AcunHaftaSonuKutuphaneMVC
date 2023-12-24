@@ -18,18 +18,9 @@ namespace Kutuphane.Repository.Shared.Abstract
 
         void Update(T item);
         void Remove(T item);
-
         void RemoveRange(IEnumerable<T> items);
-
         T GetById(int id);
-
         T GetFirstOrDefault(Expression<Func<T, bool>> filter);
-
-     
-
-
-        
-
-
+        void Save();
     }
 }

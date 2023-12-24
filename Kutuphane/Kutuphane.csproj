@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -20,6 +20,7 @@
     <ProjectReference Include="..\Kutuphane.Data\Kutuphane.Data.csproj" />
     <ProjectReference Include="..\Kutuphane.Models\Kutuphane.Models.csproj" />
     <ProjectReference Include="..\Kutuphane.Repository\Kutuphane.Repository.csproj" />
+    <ProjectReference Include="..\Kutuphane.Service\Kutuphane.Service.csproj" />
   </ItemGroup>
 
 </Project>

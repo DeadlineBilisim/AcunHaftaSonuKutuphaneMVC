@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kutuphane.Models", "Kutupha
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kutuphane.Data", "Kutuphane.Data\Kutuphane.Data.csproj", "{99318A9B-8943-4D8B-8872-73AABF2E954C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kutuphane.Repository", "Kutuphane.Repository\Kutuphane.Repository.csproj", "{4946746E-1CAB-45ED-BFAC-C62C3451B19D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kutuphane.Repository", "Kutuphane.Repository\Kutuphane.Repository.csproj", "{4946746E-1CAB-45ED-BFAC-C62C3451B19D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kutuphane.Service", "Kutuphane.Service\Kutuphane.Service.csproj", "{12B52C3E-5D73-4A51-A24C-0F0ACE768D2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{4946746E-1CAB-45ED-BFAC-C62C3451B19D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4946746E-1CAB-45ED-BFAC-C62C3451B19D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4946746E-1CAB-45ED-BFAC-C62C3451B19D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12B52C3E-5D73-4A51-A24C-0F0ACE768D2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12B52C3E-5D73-4A51-A24C-0F0ACE768D2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12B52C3E-5D73-4A51-A24C-0F0ACE768D2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12B52C3E-5D73-4A51-A24C-0F0ACE768D2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -20,8 +20,6 @@ namespace Kutuphane.Repository.Shared.Concrete
 
         public IRepository<YayinEvi> YayinEvleri { get; private set; }
 
-        public IYazarRepository Yazarlar { get; private set; }
-
         public IRepository<Kullanici> Kullanicilar {get;private set; }
 
         public UnitOfWork(KutuphaneContext db)
@@ -29,7 +27,6 @@ namespace Kutuphane.Repository.Shared.Concrete
             _db = db;
             Kitaplar = new Repository<Kitap>(db);
             YayinEvleri = new Repository<YayinEvi>(db);
-            Yazarlar=new YazarRepository(db);
             Kullanicilar = new Repository<Kullanici>(db);
 
         }

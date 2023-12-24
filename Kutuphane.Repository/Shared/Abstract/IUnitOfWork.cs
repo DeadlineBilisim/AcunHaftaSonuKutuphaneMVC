@@ -13,8 +13,6 @@ namespace Kutuphane.Repository.Shared.Abstract
         IRepository<Kitap> Kitaplar { get; }
         IRepository<YayinEvi> YayinEvleri { get; }
 
-        IYazarRepository Yazarlar { get; }
-
         IRepository<Kullanici> Kullanicilar { get; }
 
         void Save();

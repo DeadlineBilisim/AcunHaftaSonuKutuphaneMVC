@@ -26,7 +26,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 BusinessExtension.AddBusinessDI(builder.Services);
 builder.Services.AddScoped<IYazarRepository, YazarRepository>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IKitapRepository, KitapRepository>();
+builder.Services.AddScoped<IKullaniciRepository, KullaniciRepository>();
+builder.Services.AddScoped<IYayinEviRepository, YayinEviRepository>();
+
 
 var app = builder.Build();
 

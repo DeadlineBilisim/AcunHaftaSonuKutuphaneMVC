@@ -1,6 +1,7 @@
 ﻿using Kutuphane.Data;
 using Kutuphane.Models;
 using Kutuphane.Repository.Shared.Abstract;
+using Kutuphane.Service.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +10,11 @@ namespace Kutuphane.Controllers
     [Authorize]
     public class YayinEviController : Controller
     {
-        private readonly IUnitOfWork _context;
+        private readonly IYayinEviService _yayinEviService;
 
-        public YayinEviController(IUnitOfWork unitOfWork)
+        public YayinEviController(IYayinEviService yayinEviService)
         {
-            _context = unitOfWork;
+            _yayinEviService = yayinEviService;
         }
 
         public IActionResult Index()
@@ -27,7 +28,7 @@ namespace Kutuphane.Controllers
 
         public IActionResult GetAllPublishers()
         {
-            return Json(new { data = _context.YayinEvleri.GetAll().ToList() });
+            return Json(new { data = _yayinEviService.GetAll() });
         }
 
         //bu metot sadece yayin evi eklemek için bize bir sayfa servis eden bir metotdur:
@@ -38,25 +39,20 @@ namespace Kutuphane.Controllers
         [HttpPost]
         public IActionResult Add(YayinEvi yayinEvi)
         {
-            _context.YayinEvleri.Add(yayinEvi);
-            _context.Save();
+            _yayinEviService.Add(yayinEvi);
             return RedirectToAction("Index");
         }
 
         public IActionResult Delete(int id)
         {
-          
-           _context.YayinEvleri.Remove( _context.YayinEvleri.GetById(id));
-            _context.Save();
+            _yayinEviService.Remove(_yayinEviService.GetById(id));
             return RedirectToAction("Index");
         }
 
         [HttpPost]
         public IActionResult DeleteAjax(int id)
-        {
-
-            _context.YayinEvleri.Remove(_context.YayinEvleri.GetById(id));
-            _context.Save();
+        {           
+            _yayinEviService.Remove(_yayinEviService.GetById(id));
             return Ok("Çalıştım");
         }
 
@@ -64,14 +60,13 @@ namespace Kutuphane.Controllers
 
         public IActionResult Update(int id)
         {
-            return View(_context.YayinEvleri.GetById(id));
+            return View(_yayinEviService.GetById(id));
         }
 
         [HttpPost]
         public IActionResult Update(YayinEvi yayinEvi)
         {
-            _context.YayinEvleri.Update(yayinEvi);
-            _context.Save();
+            _yayinEviService.Update(yayinEvi);
             return RedirectToAction("Index");
         }
 
@@ -83,7 +78,7 @@ namespace Kutuphane.Controllers
             }
             else
             {
-                return View(_context.YayinEvleri.GetById(id));
+                return View(_yayinEviService.GetById(id));
             }
         }
 
@@ -94,14 +89,12 @@ namespace Kutuphane.Controllers
             {
                 if (yayinEvi.Id == 0)
                 {
-                    _context.YayinEvleri.Add(yayinEvi);
+                    _yayinEviService.Add(yayinEvi);
                 }
                 else
                 {
-                    _context.YayinEvleri.Update(yayinEvi);
+                    _yayinEviService.Update(yayinEvi);
                 }
-
-                _context.Save();
             }
 
             return RedirectToAction("Index");   
@@ -109,7 +102,7 @@ namespace Kutuphane.Controllers
         [HttpPost]
         public IActionResult GetById(int id)
         {
-            return Json(_context.YayinEvleri.GetById(id));
+            return Json(_yayinEviService.GetById(id));
         }
     }
 }

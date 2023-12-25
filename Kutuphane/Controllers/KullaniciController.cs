@@ -1,5 +1,6 @@
 ﻿using Kutuphane.Models;
 using Kutuphane.Repository.Shared.Abstract;
+using Kutuphane.Service.Abstract;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +11,10 @@ namespace Kutuphane.Controllers
 {
     public class KullaniciController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public KullaniciController(IUnitOfWork unitOfWork)
+        private readonly IKullaniciService _kullaniciService;
+        public KullaniciController(IKullaniciService kullaniciService)
         {
-            _unitOfWork = unitOfWork;
+            _kullaniciService = kullaniciService;
         }
 
         public IActionResult Login() { 
@@ -24,7 +24,7 @@ namespace Kutuphane.Controllers
         [HttpPost]
         public IActionResult Login(Kullanici kul)
         {
-           Kullanici kullanici = _unitOfWork.Kullanicilar.GetFirstOrDefault(k => k.Username == kul.Username && k.Password == kul.Password);
+           Kullanici kullanici = _kullaniciService.GetUser(kul);
 
             if (kullanici != null)
             {
@@ -47,15 +47,8 @@ namespace Kutuphane.Controllers
 
                 HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                 HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdenity), new AuthenticationProperties { IsPersistent=true });
-
-             
-
-
-
-
             }
             return Ok();
-
         }
 
         public IActionResult Logout()
@@ -63,7 +56,5 @@ namespace Kutuphane.Controllers
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
         }
-
-      
     }
 }

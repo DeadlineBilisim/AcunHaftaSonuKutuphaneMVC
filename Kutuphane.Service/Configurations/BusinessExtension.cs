@@ -14,6 +14,9 @@ namespace Kutuphane.Service.Configurations
         public static void AddBusinessDI(this IServiceCollection services)
         {
             services.AddScoped<IYazarService, YazarService>();
+            services.AddScoped<IKitapService, KitapService>();
+            services.AddScoped<IYayinEviService, YayinEviService>();
+            services.AddScoped<IKullaniciService, KullaniciService>();
         }
     }
 }

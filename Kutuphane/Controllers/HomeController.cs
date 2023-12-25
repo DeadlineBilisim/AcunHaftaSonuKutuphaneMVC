@@ -11,11 +11,9 @@ namespace Kutuphane.Controllers
     public class HomeController : Controller
     {
 
-        private readonly IUnitOfWork _unitOfWork;
 
-        public HomeController(IUnitOfWork unitOfWork)
+        public HomeController()
         {
-            _unitOfWork = unitOfWork;
           
         }
        
